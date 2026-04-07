@@ -16,8 +16,11 @@ const AMOUNT_FILTERS: Record<string, number> = {
   '10m': 10_000_000,
 };
 
+const PAGE_SIZES = [3, 5, 10, 20, 40, 50, 100];
+
 export default function Home() {
-  const { transfers, loading, error } = useWhaleTransfers();
+  const [pageSize, setPageSize] = useState(3);
+  const { transfers, loading, error } = useWhaleTransfers(pageSize);
   const [searchQuery, setSearchQuery] = useState('');
   const [amountFilter, setAmountFilter] = useState('all');
 
@@ -86,6 +89,27 @@ export default function Home() {
             {filteredTransfers.map((tx, index) => (
               <TransferCard key={tx.id} transfer={tx} index={index} />
             ))}
+
+            {/* Pagination */}
+            <div className="flex items-center justify-center gap-3 pt-6">
+              <span className="text-xs text-on-surface-variant">Show</span>
+              <div className="flex items-center gap-1 bg-surface-container-lowest rounded-lg ring-1 ring-outline-variant/10 p-1">
+                {PAGE_SIZES.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setPageSize(size)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                      pageSize === size
+                        ? 'bg-primary text-on-primary'
+                        : 'text-on-surface-variant hover:bg-surface-container-high'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+              <span className="text-xs text-on-surface-variant">transfers</span>
+            </div>
           </div>
 
           {/* Bento Insights Grid */}

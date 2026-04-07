@@ -31,14 +31,26 @@ export default function NotificationProvider({
     let unsubscribe: (() => void) | undefined;
 
     async function setupMessaging() {
+      // Register service worker for background notifications
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log('Service Worker registered:', registration.scope);
+
       const messaging = await getMessagingInstance();
       if (!messaging) return;
 
       try {
         const token = await getToken(messaging, {
           vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+          serviceWorkerRegistration: registration,
         });
         console.log('FCM Token:', token);
+
+        await fetch('http://localhost:3001/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+        console.log('Subscribed to whale-alerts topic');
       } catch (err) {
         console.error('FCM token error:', err);
       }
@@ -84,7 +96,7 @@ export default function NotificationProvider({
       )}
 
       {notification && (
-        <div className="fixed top-4 right-4 bg-gray-900 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm animate-slide-in">
+        <div className="fixed top-24 right-4 bg-surface-container-high text-on-surface p-4 rounded-lg shadow-lg z-40 max-w-sm animate-slide-in border border-outline-variant/20">
           <p className="font-semibold text-sm">{notification.title}</p>
           <p className="text-gray-300 text-xs mt-1">{notification.body}</p>
         </div>

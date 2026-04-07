@@ -59,6 +59,15 @@ export class FirebaseService implements OnModuleInit {
     }
   }
 
+  async subscribeToTopic(token: string): Promise<void> {
+    try {
+      await this.messaging.subscribeToTopic([token], 'whale-alerts');
+      this.logger.log(`FCM: Token subscribed to whale-alerts`);
+    } catch (error) {
+      this.logger.error('FCM: Failed to subscribe token', error);
+    }
+  }
+
   private async sendNotification(transfer: TransferEvent): Promise<void> {
     try {
       const message: admin.messaging.Message = {

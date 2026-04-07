@@ -2,11 +2,13 @@
 
 import { useState, useMemo } from 'react';
 import { useWhaleTransfers } from '@/hooks/useWhaleTransfers';
+import { useVolumeStats } from '@/hooks/useVolumeStats';
 import Header from '@/components/Header';
 import StatsSection from '@/components/StatsSection';
 import SearchFilter from '@/components/SearchFilter';
 import TransferCard from '@/components/TransferCard';
 import TransferSkeleton from '@/components/TransferSkeleton';
+import VolumeCard from '@/components/VolumeCard';
 import MobileNav from '@/components/MobileNav';
 
 const AMOUNT_FILTERS: Record<string, number> = {
@@ -21,6 +23,7 @@ const PAGE_SIZES = [3, 5, 10, 20, 40, 50, 100];
 export default function Home() {
   const [pageSize, setPageSize] = useState(3);
   const { transfers, loading, error } = useWhaleTransfers(pageSize);
+  const { slots6h, slots24h, loading: volumeLoading } = useVolumeStats();
   const [searchQuery, setSearchQuery] = useState('');
   const [amountFilter, setAmountFilter] = useState('all');
 
@@ -114,27 +117,7 @@ export default function Home() {
 
           {/* Bento Insights Grid */}
           <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 p-8 rounded-2xl bg-surface-container-low overflow-hidden relative group min-h-[300px]">
-              <div className="relative z-10">
-                <h4 className="text-xl font-bold mb-4">Volume Concentration</h4>
-                <p className="text-on-surface-variant text-sm max-w-sm mb-6">
-                  Distribution of whale transfer volumes across recent transactions.
-                </p>
-                <div className="flex items-end gap-2 h-32">
-                  {[40, 70, 90, 50].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 bg-primary-container rounded-t-lg transition-all duration-700"
-                      style={{
-                        height: `${h}%`,
-                        opacity: 0.2 + i * 0.2,
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50" />
-            </div>
+            <VolumeCard slots6h={slots6h} slots24h={slots24h} loading={volumeLoading} />
             <div className="p-8 rounded-2xl bg-primary-container text-on-primary-container flex flex-col justify-between">
               <div>
                 <span

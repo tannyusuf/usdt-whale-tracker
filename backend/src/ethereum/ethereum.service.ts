@@ -15,6 +15,7 @@ import {
 } from 'viem';
 import { mainnet } from 'viem/chains';
 import { TransferEvent } from './interfaces/transfer-event.interface';
+import { FirebaseService } from '../firebase/firebase.service';
 
 const USDT_ABI = parseAbi([
   'event Transfer(address indexed from, address indexed to, uint256 value)',
@@ -33,7 +34,10 @@ export class EthereumService implements OnModuleInit, OnModuleDestroy {
   private maxReconnectAttempts = 20;
   private reconnectTimeout: NodeJS.Timeout | null = null;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly firebaseService: FirebaseService,
+  ) {
     this.contractAddress = this.configService.get<string>(
       'USDT_CONTRACT_ADDRESS',
     ) as `0x${string}`;
@@ -117,7 +121,9 @@ export class EthereumService implements OnModuleInit, OnModuleDestroy {
       `WHALE ALERT | ${transfer.amount.toLocaleString()} USDT | ${transfer.from} -> ${transfer.to} | tx: ${transfer.transactionHash}`,
     );
 
-    // Phase 2'de burada Firebase servisine iletilecek
+    this.firebaseService.handleWhaleTransfer(transfer).catch((error) => {
+      this.logger.error('Firebase handling failed', error);
+    });
   }
 
   private scheduleReconnect() {

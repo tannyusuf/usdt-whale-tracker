@@ -1,63 +1,113 @@
-import Image from "next/image";
+'use client';
+
+import { useWhaleTransfers } from '@/hooks/useWhaleTransfers';
+
+function shortenAddress(address: string) {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
+
+function formatAmount(amount: number) {
+  return amount.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+}
+
+function timeAgo(date: Date | null) {
+  if (!date) return '';
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
 export default function Home() {
+  const { transfers, loading, error } = useWhaleTransfers();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-950 text-white">
+      <header className="border-b border-gray-800 px-4 py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <h1 className="text-xl font-bold">USDT Whale Tracker</h1>
+          <div className="flex items-center gap-2 text-sm text-green-400">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            Live
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-4 py-6">
+        {loading && (
+          <div className="text-center text-gray-400 py-12">Loading transfers...</div>
+        )}
+
+        {error && (
+          <div className="text-center text-red-400 py-12">Error: {error}</div>
+        )}
+
+        {!loading && transfers.length === 0 && (
+          <div className="text-center text-gray-500 py-12">
+            <p className="text-lg">No whale transfers yet</p>
+            <p className="text-sm mt-2">Waiting for transfers &ge; 100,000 USDT...</p>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {transfers.map((tx) => (
+            <div
+              key={tx.id}
+              className="bg-gray-900 border border-gray-800 rounded-lg p-4"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-lg font-semibold text-green-400">
+                  {formatAmount(tx.amount)} USDT
+                </span>
+                <span className="text-xs text-gray-500">
+                  {timeAgo(tx.timestamp)}
+                </span>
+              </div>
+
+              <div className="text-sm text-gray-400 space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 w-12">From</span>
+                  <a
+                    href={`https://etherscan.io/address/${tx.from}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline font-mono"
+                  >
+                    {shortenAddress(tx.from)}
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 w-12">To</span>
+                  <a
+                    href={`https://etherscan.io/address/${tx.to}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline font-mono"
+                  >
+                    {shortenAddress(tx.to)}
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-2 pt-2 border-t border-gray-800">
+                <a
+                  href={`https://etherscan.io/tx/${tx.transactionHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-gray-500 hover:text-blue-400 font-mono"
+                >
+                  {shortenAddress(tx.transactionHash)}
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     </div>

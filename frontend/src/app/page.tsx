@@ -9,6 +9,7 @@ import SearchFilter from '@/components/SearchFilter';
 import TransferCard from '@/components/TransferCard';
 import TransferSkeleton from '@/components/TransferSkeleton';
 import VolumeCard from '@/components/VolumeCard';
+import AlertToggleCard from '@/components/AlertToggleCard';
 import MobileNav from '@/components/MobileNav';
 
 const AMOUNT_FILTERS: Record<string, number> = {
@@ -118,22 +119,7 @@ export default function Home() {
           {/* Bento Insights Grid */}
           <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
             <VolumeCard slots6h={slots6h} slots24h={slots24h} loading={volumeLoading} />
-            <div className="p-8 rounded-2xl bg-primary-container text-on-primary-container flex flex-col justify-between">
-              <div>
-                <span
-                  className="material-symbols-outlined text-4xl mb-4"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  bolt
-                </span>
-                <h4 className="text-2xl font-black leading-tight">
-                  Instant Alerts Enabled
-                </h4>
-              </div>
-              <p className="text-sm font-medium opacity-80">
-                Connected to Ethereum mainnet via Alchemy WebSocket for real-time transaction visibility.
-              </p>
-            </div>
+            <AlertToggleCard />
           </section>
         </main>
       </div>

@@ -56,9 +56,6 @@ export default function NotificationProvider({
       }
 
       unsubscribe = onMessage(messaging, (payload) => {
-        const alertsEnabled = localStorage.getItem('alerts-enabled') !== 'false';
-        if (!alertsEnabled) return;
-
         const newNotification: Notification = {
           id: Date.now().toString(),
           title: payload.notification?.title || 'Whale Alert!',

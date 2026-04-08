@@ -80,35 +80,42 @@ export default function VolumeCard({ slots6h, slots24h, loading }: VolumeCardPro
     <>
       <div
         onClick={() => setIsOpen(true)}
-        className="lg:col-span-2 p-8 rounded-2xl bg-surface-container-low overflow-hidden relative group min-h-[300px] cursor-pointer"
+        className="lg:col-span-2 p-4 md:p-8 rounded-2xl bg-surface-container-low overflow-hidden relative group min-h-[200px] md:min-h-[300px] cursor-pointer"
       >
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xl font-bold">Volume Concentration</h4>
+            <h4 className="text-lg md:text-xl font-bold">Volume Concentration</h4>
             <span className="text-xs text-on-surface-variant/60 flex items-center gap-1">
               Click for 24h view
               <span className="material-symbols-outlined text-sm">open_in_full</span>
             </span>
           </div>
-          <p className="text-on-surface-variant text-sm max-w-sm mb-2">
+          <p className="text-on-surface-variant text-xs md:text-sm max-w-sm mb-1 md:mb-2">
             Whale transfer volume distribution in the last 6 hours.
           </p>
-          <p className="text-xs text-on-surface-variant/60 mb-6">
+          <p className="text-[10px] md:text-xs text-on-surface-variant/60 mb-4 md:mb-6">
             {count6h} transfers | {formatVolume(total6h)} USDT total
           </p>
 
           {loading ? (
-            <div className="flex items-end gap-2" style={{ height: '160px' }}>
+            <div className="flex items-end gap-2" style={{ height: '120px' }}>
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
                   className="flex-1 bg-surface-container-high rounded-t-lg animate-skeleton"
-                  style={{ height: `${40 + i * 25}px` }}
+                  style={{ height: `${30 + i * 20}px` }}
                 />
               ))}
             </div>
           ) : (
-            <BarChart slots={slots6h} heightPx={160} />
+            <div>
+              <div className="hidden md:block">
+                <BarChart slots={slots6h} heightPx={160} />
+              </div>
+              <div className="md:hidden">
+                <BarChart slots={slots6h} heightPx={100} />
+              </div>
+            </div>
           )}
         </div>
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50" />
@@ -119,11 +126,11 @@ export default function VolumeCard({ slots6h, slots24h, loading }: VolumeCardPro
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div
             ref={popupRef}
-            className="bg-surface-container-high border border-outline-variant/20 rounded-2xl shadow-2xl w-[90vw] max-w-3xl p-8 animate-slide-in"
+            className="bg-surface-container-high border border-outline-variant/20 rounded-2xl shadow-2xl w-[95vw] max-w-3xl p-4 md:p-8 animate-slide-in"
           >
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 md:mb-6">
               <div>
-                <h4 className="text-xl font-bold">Volume Concentration - Last 24 Hours</h4>
+                <h4 className="text-base md:text-xl font-bold">Volume Concentration - Last 24 Hours</h4>
                 <p className="text-sm text-on-surface-variant mt-1">
                   Each bar represents a 2-hour window.{' '}
                   {slots24h.reduce((s, sl) => s + sl.count, 0)} transfers |{' '}
@@ -138,7 +145,12 @@ export default function VolumeCard({ slots6h, slots24h, loading }: VolumeCardPro
               </button>
             </div>
 
-            <BarChart slots={slots24h} heightPx={280} />
+            <div className="hidden md:block">
+              <BarChart slots={slots24h} heightPx={280} />
+            </div>
+            <div className="md:hidden">
+              <BarChart slots={slots24h} heightPx={180} />
+            </div>
           </div>
         </div>
       )}

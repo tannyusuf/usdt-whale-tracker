@@ -10,7 +10,6 @@ import TransferCard from '@/components/TransferCard';
 import TransferSkeleton from '@/components/TransferSkeleton';
 import VolumeCard from '@/components/VolumeCard';
 import AlertToggleCard from '@/components/AlertToggleCard';
-import MobileNav from '@/components/MobileNav';
 
 const AMOUNT_FILTERS: Record<string, number> = {
   all: 0,
@@ -54,7 +53,7 @@ export default function Home() {
       <Header transfers={transfers} />
 
       <div className="min-h-[calc(100vh-68px)]">
-        <main className="p-6 lg:p-8 max-w-7xl mx-auto w-full pb-24 md:pb-8">
+        <main className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full pb-8">
           <StatsSection transfers={transfers} loading={loading} />
 
           <SearchFilter
@@ -95,14 +94,14 @@ export default function Home() {
             ))}
 
             {/* Pagination */}
-            <div className="flex items-center justify-center gap-3 pt-6">
+            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-4 md:pt-6">
               <span className="text-xs text-on-surface-variant">Show</span>
-              <div className="flex items-center gap-1 bg-surface-container-lowest rounded-lg ring-1 ring-outline-variant/10 p-1">
+              <div className="flex flex-wrap items-center gap-1 bg-surface-container-lowest rounded-lg ring-1 ring-outline-variant/10 p-1">
                 {PAGE_SIZES.map((size) => (
                   <button
                     key={size}
                     onClick={() => setPageSize(size)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
+                    className={`px-2.5 md:px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer ${
                       pageSize === size
                         ? 'bg-primary text-on-primary'
                         : 'text-on-surface-variant hover:bg-surface-container-high'
@@ -117,14 +116,13 @@ export default function Home() {
           </div>
 
           {/* Bento Insights Grid */}
-          <section className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <section className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <VolumeCard slots6h={slots6h} slots24h={slots24h} loading={volumeLoading} />
             <AlertToggleCard />
           </section>
         </main>
       </div>
 
-      <MobileNav />
     </div>
   );
 }

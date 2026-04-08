@@ -36,11 +36,11 @@ export default function TransferCard({ transfer, index }: TransferCardProps) {
 
   return (
     <div
-      className={`group flex flex-col md:flex-row md:items-center justify-between p-5 rounded-xl ${bgClass} hover:bg-surface-container-high transition-all duration-300 gap-4 animate-slide-in`}
+      className={`group flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 rounded-xl ${bgClass} hover:bg-surface-container-high transition-all duration-300 gap-3 md:gap-4 animate-slide-in`}
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-black text-primary tracking-tighter">
+          <span className="text-xl md:text-2xl font-black text-primary tracking-tighter">
             {formatAmount(transfer.amount)} USDT
           </span>
           {isWhaleAlert && (

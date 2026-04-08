@@ -14,7 +14,7 @@ export default function SearchFilter({
   onAmountFilterChange,
 }: SearchFilterProps) {
   return (
-    <div className="flex flex-col md:flex-row items-center gap-4 mb-8 bg-surface-container-lowest p-4 rounded-xl ring-1 ring-outline-variant/10">
+    <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-6 md:mb-8 bg-surface-container-lowest p-3 md:p-4 rounded-xl ring-1 ring-outline-variant/10">
       <div className="relative flex-1 w-full">
         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">
           search

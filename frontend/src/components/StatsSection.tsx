@@ -33,11 +33,11 @@ export default function StatsSection({ transfers, loading }: StatsSectionProps) 
   ];
 
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <section className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-10">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className={`p-6 rounded-xl bg-surface-container-low transition-all hover:bg-surface-container shadow-sm ${
+          className={`p-4 md:p-6 rounded-xl bg-surface-container-low transition-all hover:bg-surface-container shadow-sm ${
             stat.highlight ? 'border-l-2 border-primary-container/20' : ''
           }`}
         >
@@ -48,7 +48,7 @@ export default function StatsSection({ transfers, loading }: StatsSectionProps) 
             <div className="h-9 w-24 bg-surface-container-high rounded animate-skeleton" />
           ) : (
             <div className="flex items-baseline gap-1">
-              <h2 className={`text-3xl font-extrabold tracking-tighter ${stat.highlight ? 'text-primary' : 'text-on-surface'}`}>
+              <h2 className={`text-2xl md:text-3xl font-extrabold tracking-tighter ${stat.highlight ? 'text-primary' : 'text-on-surface'}`}>
                 {stat.value}
               </h2>
               {stat.suffix && (

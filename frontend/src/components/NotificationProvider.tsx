@@ -82,7 +82,7 @@ export default function NotificationProvider({
       {children}
 
       {permission === 'default' && (
-        <div className="fixed bottom-4 right-4 bg-gray-900 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
+        <div className="fixed bottom-4 right-4 left-4 md:left-auto bg-gray-900 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
           <p className="text-sm mb-2">
             Enable notifications to receive whale alerts in real-time.
           </p>
@@ -96,7 +96,7 @@ export default function NotificationProvider({
       )}
 
       {notification && (
-        <div className="fixed top-24 right-4 bg-surface-container-high text-on-surface p-4 rounded-lg shadow-lg z-40 max-w-sm animate-slide-in border border-outline-variant/20">
+        <div className="fixed top-16 md:top-24 right-4 left-4 md:left-auto bg-surface-container-high text-on-surface p-4 rounded-lg shadow-lg z-40 max-w-[calc(100vw-2rem)] md:max-w-sm animate-slide-in border border-outline-variant/20">
           <p className="font-semibold text-sm">{notification.title}</p>
           <p className="text-gray-300 text-xs mt-1">{notification.body}</p>
         </div>

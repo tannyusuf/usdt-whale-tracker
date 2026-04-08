@@ -62,10 +62,11 @@ export default function Header({ transfers }: HeaderProps) {
   };
 
   return (
-    <nav className="sticky top-0 z-50 flex justify-between items-center w-full px-6 py-4 bg-surface/95 backdrop-blur-md border-b border-outline-variant/10">
-      <div className="text-xl font-bold tracking-tight text-on-surface flex items-center gap-2">
-        <span className="material-symbols-outlined text-primary">hub</span>
-        USDT Whale Tracker
+    <nav className="sticky top-0 z-50 flex justify-between items-center w-full px-4 py-3 md:px-6 md:py-4 bg-surface/95 backdrop-blur-md border-b border-outline-variant/10">
+      <div className="text-base md:text-xl font-bold tracking-tight text-on-surface flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary text-xl md:text-2xl">hub</span>
+        <span className="hidden sm:inline">USDT Whale Tracker</span>
+        <span className="sm:hidden">Whale Tracker</span>
       </div>
       <div className="flex items-center gap-4">
         {/* Notifications */}
@@ -83,7 +84,7 @@ export default function Header({ transfers }: HeaderProps) {
           </button>
 
           {isOpen && (
-            <div className="absolute right-0 top-12 w-80 md:w-96 bg-surface-container-high border border-outline-variant/20 rounded-xl shadow-2xl overflow-hidden animate-slide-in">
+            <div className="absolute -right-2 md:right-0 top-12 w-[calc(100vw-2rem)] sm:w-80 md:w-96 bg-surface-container-high border border-outline-variant/20 rounded-xl shadow-2xl overflow-hidden animate-slide-in">
               <div className="px-4 py-3 border-b border-outline-variant/10 flex items-center justify-between">
                 <h4 className="text-sm font-bold text-on-surface">Notifications</h4>
                 <span className="text-xs text-on-surface-variant">

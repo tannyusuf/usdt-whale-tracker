@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { WhaleTransfer } from '@/hooks/useWhaleTransfers';
+import { useTheme } from '@/components/ThemeProvider';
 
 function shortenAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -31,6 +32,7 @@ interface HeaderProps {
 }
 
 export default function Header({ transfers }: HeaderProps) {
+  const { theme, toggle: toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [lastSeen, setLastSeen] = useState(0);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -121,8 +123,13 @@ export default function Header({ transfers }: HeaderProps) {
         </div>
 
         {/* Theme toggle */}
-        <button className="p-2 rounded-full hover:bg-surface-bright transition-colors text-on-surface-variant">
-          <span className="material-symbols-outlined">dark_mode</span>
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full hover:bg-surface-bright transition-colors text-on-surface-variant cursor-pointer"
+        >
+          <span className="material-symbols-outlined">
+            {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+          </span>
         </button>
       </div>
     </nav>

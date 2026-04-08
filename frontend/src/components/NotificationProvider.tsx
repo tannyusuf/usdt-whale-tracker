@@ -33,7 +33,6 @@ export default function NotificationProvider({
     async function setupMessaging() {
       // Register service worker for background notifications
       const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-      console.log('Service Worker registered:', registration.scope);
 
       const messaging = await getMessagingInstance();
       if (!messaging) return;
@@ -43,14 +42,12 @@ export default function NotificationProvider({
           vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
           serviceWorkerRegistration: registration,
         });
-        console.log('FCM Token:', token);
-
-        await fetch('http://localhost:3001/subscribe', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        await fetch(`${apiUrl}/subscribe`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
         });
-        console.log('Subscribed to whale-alerts topic');
       } catch (err) {
         console.error('FCM token error:', err);
       }

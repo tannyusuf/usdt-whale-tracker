@@ -14,6 +14,7 @@ out/
 # Firebase
 firebase-service-account.json
 serviceAccountKey.json
+firebase-config.js
 
 # IDE
 .idea/

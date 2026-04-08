@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useWhaleTransfers } from '@/hooks/useWhaleTransfers';
+import { useTransferStats } from '@/hooks/useTransferStats';
 import { useVolumeStats } from '@/hooks/useVolumeStats';
 import Header from '@/components/Header';
 import StatsSection from '@/components/StatsSection';
@@ -23,6 +24,7 @@ const PAGE_SIZES = [3, 5, 10, 20, 40, 50, 100];
 export default function Home() {
   const [pageSize, setPageSize] = useState(3);
   const { transfers, loading, error } = useWhaleTransfers(pageSize);
+  const transferStats = useTransferStats();
   const { slots6h, slots24h, loading: volumeLoading } = useVolumeStats();
   const [searchQuery, setSearchQuery] = useState('');
   const [amountFilter, setAmountFilter] = useState('all');
@@ -54,7 +56,7 @@ export default function Home() {
 
       <div className="min-h-[calc(100vh-68px)]">
         <main className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full pb-8">
-          <StatsSection transfers={transfers} loading={loading} />
+          <StatsSection stats={transferStats} loading={transferStats.loading} />
 
           <SearchFilter
             searchQuery={searchQuery}

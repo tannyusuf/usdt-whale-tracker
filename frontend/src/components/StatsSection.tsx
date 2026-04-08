@@ -1,9 +1,9 @@
 'use client';
 
-import { WhaleTransfer } from '@/hooks/useWhaleTransfers';
+import { TransferStats } from '@/hooks/useTransferStats';
 
 interface StatsSectionProps {
-  transfers: WhaleTransfer[];
+  stats: TransferStats;
   loading: boolean;
 }
 
@@ -14,18 +14,10 @@ function formatVolume(amount: number): string {
   return amount.toFixed(0);
 }
 
-export default function StatsSection({ transfers, loading }: StatsSectionProps) {
-  const totalTransfers = transfers.length;
-  const totalVolume = transfers.reduce((sum, t) => sum + t.amount, 0);
-  const largestTransfer = transfers.length > 0
-    ? Math.max(...transfers.map((t) => t.amount))
-    : 0;
-  const now = Date.now();
-  const last24h = transfers.filter(
-    (t) => t.timestamp && now - t.timestamp.getTime() < 24 * 60 * 60 * 1000,
-  ).length;
+export default function StatsSection({ stats, loading }: StatsSectionProps) {
+  const { totalTransfers, totalVolume, largestTransfer, last24h } = stats;
 
-  const stats = [
+  const cards = [
     { label: 'Total Transfers', value: totalTransfers.toLocaleString(), suffix: '' },
     { label: 'Total Volume', value: formatVolume(totalVolume), suffix: 'USDT' },
     { label: 'Largest Transfer', value: formatVolume(largestTransfer), suffix: 'USDT', highlight: true },
@@ -34,7 +26,7 @@ export default function StatsSection({ transfers, loading }: StatsSectionProps) 
 
   return (
     <section className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-10">
-      {stats.map((stat) => (
+      {cards.map((stat) => (
         <div
           key={stat.label}
           className={`p-4 md:p-6 rounded-xl bg-surface-container-low transition-all hover:bg-surface-container shadow-sm ${
